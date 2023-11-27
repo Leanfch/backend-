@@ -1,19 +1,10 @@
 import { Router } from "express"
-import {
-    createUser,
-    loginUser,
-    revalidateToken,
-} from "../controllers/usersController.js"
+import accountController from "../controllers/accountController.js"
+import { validateAccount } from "../middleware/account.js"
 
 const usersRoutes = Router()
 
 // crear un usuario
-usersRoutes.post("/new", createUser)
-
-// logear un usuario
-usersRoutes.post("/login", loginUser)
-
-// validar y revalidar token
-usersRoutes.get("/renew", generateJWT, revalidateToken)
+usersRoutes.post("/new", [validateAccount], accountController.createAccount)
 
 export default usersRoutes
