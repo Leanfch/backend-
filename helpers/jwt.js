@@ -1,26 +1,17 @@
-import { sign } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
-const generateJWT = (uid, name) => {
+export function createJWT(payload) {
     return new Promise((resolve, reject) => {
-        const payload = { uid, name }
-
-        sign(
+        jwt.sign(
             payload,
-            process.env.SECRET_JWT_SEED,
+            "secret123",
             {
-                expiresIn: "12h",
+                expiresIn: "1d",
             },
             (err, token) => {
-                if (err) {
-                    console.log(err)
-                    reject("No se pudo generar el token")
-                }
+                if (err) console.log(err)
                 resolve(token)
             }
         )
     })
-}
-
-export default {
-    generateJWT,
 }
