@@ -39,6 +39,7 @@ export const login = async (req, res) => {
                 id: userFound._id,
                 name: userFound.name,
                 email: userFound.email,
+                token: token,
             })
         } else {
             return res.status(400).json({ message: "Contraseña incorrecta" })

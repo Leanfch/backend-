@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose"
 
 const gameSchema = Schema({
     name: {
@@ -17,8 +17,13 @@ const gameSchema = Schema({
         type: Number,
         required: true,
     },
-});
+    totalPoints: {
+        type: Number,
+        default: 0,
+    },
+})
 
-const Game = model("Games", gameSchema);
+const Game = model("Games", gameSchema)
 
-export default Game;
+export { gameSchema }
+export default Game

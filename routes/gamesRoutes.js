@@ -1,26 +1,30 @@
-import { Router } from "express";
+import { Router } from "express"
 import {
     getAllGames,
     getGameById,
     updateGameById,
-    deleteGameById,
+    getGamesByEditionSortedController,
+    // deleteGameById,
     createGame,
-} from "../controllers/gamesController.js";
-const gamesRoutes = Router();
+} from "../controllers/gamesController.js"
+const gamesRoutes = Router()
 
 // crear un juego
-gamesRoutes.post("", createGame);
+gamesRoutes.post("", createGame)
 
 // traer todos los juegos
-gamesRoutes.get("", getAllGames);
+gamesRoutes.get("", getAllGames)
 
 // traer un juego por su id
-gamesRoutes.get("/:id", getGameById);
+gamesRoutes.get("/:id", getGameById)
 
 // actualizar un juego
-gamesRoutes.put("", updateGameById);
+gamesRoutes.put("", updateGameById)
+
+// traer todos los juegos de una edicion ordenados por puntaje
+gamesRoutes.get("/edition/:edition", getGamesByEditionSortedController)
 
 // borrar un juego
-gamesRoutes.delete("", deleteGameById);
+// gamesRoutes.delete("", deleteGameById);
 
-export default gamesRoutes;
+export default gamesRoutes

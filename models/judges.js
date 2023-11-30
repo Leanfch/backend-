@@ -1,12 +1,13 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose"
 
 const judgeSchema = Schema({
     name: {
         type: String,
         required: true,
     },
-});
+})
 
-const Judge = model("Judges", judgeSchema);
+const Judge = model("Judges", judgeSchema)
 
-export default Judge;
+export { judgeSchema }
+export default Judge

@@ -1,6 +1,6 @@
-import Vote from "../models/votes.js";
-import Judge from "../models/judges.js";
-import Game from "../models/games.js";
+import Vote from "../models/votes.js"
+import Judge from "../models/judges.js"
+import Game from "../models/games.js"
 
 const submitVote = async (
     judgeId,
@@ -10,6 +10,8 @@ const submitVote = async (
     soundPoints,
     themePoints
 ) => {
+    const judge = await Judge.findById(judgeId)
+    const game = await Game.findById(gameId)
     // const judge = await Judge.findById(judgeId);
     // if (!judge) {
     //     throw new Error("Juez no encontrado.");
@@ -19,44 +21,46 @@ const submitVote = async (
     // if (!game) {
     //     throw new Error("Juego no encontrado.");
     // }
+    if (!judge || !game) {
+        throw new Error("Juez o juego no encontrado.")
+    }
 
     const existingVote = await Vote.findOne({
-        judge: judgeId,
-        game: gameId,
-    });
+        judge: judge._id,
+        game: game._id,
+    })
 
     if (existingVote) {
-        throw new Error("Ya has votado por este juego.");
+        throw new Error("Ya has votado por este juego.")
     }
 
     const newVote = new Vote({
-        judge: judgeId,
-        game: gameId,
+        judge,
+        game,
         gameplayPoints,
         artPoints,
         soundPoints,
         themePoints,
-    });
+    })
 
-    await newVote.save();
+    await newVote.save()
 
-    return newVote;
-};
+    return newVote
+}
 
 const getVotesByJudge = async (judgeId) => {
-    const votes = await Vote.find({ judge: judgeId });
+    const votes = await Vote.find({ "judge._id": judgeId })
 
-    return votes;
-};
+    return votes
+}
 
 const getVotesByGame = async (gameId) => {
-    const votes = await Vote.find({ game: gameId });
-
-    return votes;
-};
+    const votes = await Vote.find({ "game._id": gameId })
+    return votes
+}
 
 const calculateAverageScoresForGame = async (gameId) => {
-    const votes = await Vote.find({ game: gameId });
+    const votes = await Vote.find({ "game._id": gameId })
 
     if (votes.length === 0) {
         return {
@@ -64,41 +68,37 @@ const calculateAverageScoresForGame = async (gameId) => {
             averageArt: 0,
             averageSound: 0,
             averageTheme: 0,
-        };
+        }
     }
 
-    const totalVotes = votes.length;
+    const totalVotes = votes.length
     const initialTotal = {
         totalGameplayPoints: 0,
         totalArtPoints: 0,
         totalSoundPoints: 0,
         totalThemePoints: 0,
-    };
+    }
 
-    const totalPoints = votes.reduce((total, vote) => {
-        total.totalGameplayPoints += vote.gameplayPoints;
-        total.totalArtPoints += vote.artPoints;
-        total.totalSoundPoints += vote.soundPoints;
-        total.totalThemePoints += vote.themePoints;
-        return total;
-    }, initialTotal);
-
-    const averageGameplay = totalPoints.totalGameplayPoints / totalVotes;
-    const averageArt = totalPoints.totalArtPoints / totalVotes;
-    const averageSound = totalPoints.totalSoundPoints / totalVotes;
-    const averageTheme = totalPoints.totalThemePoints / totalVotes;
+    const totals = votes.reduce((acc, vote) => {
+        return {
+            totalGameplayPoints: acc.totalGameplayPoints + vote.gameplayPoints,
+            totalArtPoints: acc.totalArtPoints + vote.artPoints,
+            totalSoundPoints: acc.totalSoundPoints + vote.soundPoints,
+            totalThemePoints: acc.totalThemePoints + vote.themePoints,
+        }
+    }, initialTotal)
 
     return {
-        averageGameplay,
-        averageArt,
-        averageSound,
-        averageTheme,
-    };
-};
+        averageGameplay: totals.totalGameplayPoints / totalVotes,
+        averageArt: totals.totalArtPoints / totalVotes,
+        averageSound: totals.totalSoundPoints / totalVotes,
+        averageTheme: totals.totalThemePoints / totalVotes,
+    }
+}
 
 export {
     submitVote,
     getVotesByGame,
     getVotesByJudge,
     calculateAverageScoresForGame,
-};
+}

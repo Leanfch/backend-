@@ -1,16 +1,10 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose"
+import { judgeSchema } from "../models/judges.js"
+import { gameSchema } from "../models/games.js"
 
 const voteSchema = Schema({
-    judge: {
-        type: Schema.Types.ObjectId,
-        ref: "Judge",
-        required: true,
-    },
-    game: {
-        type: Schema.Types.ObjectId,
-        ref: "Game",
-        required: true,
-    },
+    judge: judgeSchema,
+    game: gameSchema,
     gameplayPoints: {
         type: Number,
         min: 1,
@@ -35,8 +29,8 @@ const voteSchema = Schema({
         max: 10,
         required: true,
     },
-});
+})
 
-const Vote = model("Vote", voteSchema);
+const Vote = model("Vote", voteSchema)
 
-export default Vote;
+export default Vote

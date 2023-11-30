@@ -3,7 +3,7 @@ import {
     getVotesByGame,
     getVotesByJudge,
     calculateAverageScoresForGame,
-} from "../services/votesService.js";
+} from "../services/votesService.js"
 
 const sendVote = async (req, res) => {
     try {
@@ -14,7 +14,7 @@ const sendVote = async (req, res) => {
             artPoints,
             soundPoints,
             themePoints,
-        } = req.body;
+        } = req.body
         const vote = await submitVote(
             judge,
             game,
@@ -22,29 +22,30 @@ const sendVote = async (req, res) => {
             artPoints,
             soundPoints,
             themePoints
-        );
-        res.status(201).json(vote);
+        )
+
+        res.status(201).json(vote)
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: error.message })
     }
-};
+}
 
 const votesByJudge = async (req, res) => {
-    const { judgeId } = req.params;
-    const votes = await getVotesByJudge(judgeId);
-    res.json(votes);
-};
+    const { judgeId } = req.params
+    const votes = await getVotesByJudge(judgeId)
+    res.json(votes)
+}
 
 const votesByGame = async (req, res) => {
-    const { gameId } = req.params;
-    const votes = await getVotesByGame(gameId);
-    res.json(votes);
-};
+    const { gameId } = req.params
+    const votes = await getVotesByGame(gameId)
+    res.json(votes)
+}
 
 const averageScores = async (req, res) => {
-    const { gameId } = req.params;
-    const averageScores = await calculateAverageScoresForGame(gameId);
-    res.json(averageScores);
-};
+    const { gameId } = req.params
+    const averageScores = await calculateAverageScoresForGame(gameId)
+    res.json(averageScores)
+}
 
-export { sendVote, votesByGame, votesByJudge, averageScores };
+export { sendVote, votesByGame, votesByJudge, averageScores }
