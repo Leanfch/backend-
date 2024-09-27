@@ -30,7 +30,7 @@ export const login = async (req, res) => {
         const userFound = await User.findOne({ email })
 
         if (!userFound)
-            return res.status(400).json({ message: "Usuario no encontrado" })
+            return res.status(400).json({ message: "User not found, please type a valid user" })
 
         if (password === userFound.password) {
             const token = await createJWT({ id: userFound._id })
@@ -42,7 +42,7 @@ export const login = async (req, res) => {
                 token: token,
             })
         } else {
-            return res.status(400).json({ message: "Contraseña incorrecta" })
+            return res.status(400).json({ message: "Password is invalid" })
         }
     } catch (error) {
         console.error(error)
@@ -54,14 +54,14 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     res.cookie("token", "")
-    return res.status(200).json({ message: "Cerraste sesión" })
+    return res.status(200).json({ message: "You logged off succesfully" })
 }
 
 export const profile = async (req, res) => {
     const userFound = await User.findById(req.user.id)
 
     if (!userFound)
-        return res.status(400).json({ message: "Usuario no encontrado" })
+        return res.status(400).json({ message: "User not found" })
     return res.json({
         id: userFound._id,
         name: userFound.name,

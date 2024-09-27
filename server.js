@@ -1,5 +1,5 @@
 import express, { json } from "express"
-import { connect } from "mongoose"
+import { connectDB } from "./db.js"
 import gamesRoutes from "./routes/gamesRoutes.js"
 import judgesRoutes from "./routes/judgesRoutes.js"
 import votesRoutes from "./routes/votesRoutes.js"
@@ -7,12 +7,14 @@ import authRouter from "./routes/authRoutes.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
 
 app.listen(port, () => {
-    console.log("App funcionando en el puerto: ", port)
+    console.log("App working on the port: ", port)
 })
+
+connectDB();
 
 app.use(json())
 
@@ -29,10 +31,5 @@ app.use("/api/votes/", votesRoutes)
 app.use("/api/auth/", authRouter)
 
 app.get("/", (req, res) => {
-    res.send("Bienvenido a mi API")
-})
-
-// mongoose connection
-connect(
-    "mongodb+srv://admin:admin@clusterlean.8tpqqpf.mongodb.net/goto-game-jam?retryWrites=true&w=majority"
-).catch((error) => console.error(error))
+    res.send("Welcome to my API :)")
+});
